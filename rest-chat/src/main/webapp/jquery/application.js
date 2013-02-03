@@ -4,24 +4,27 @@ $(function () {
     var content = $('#content');
     var input = $('#input');
     var status = $('#status');
-
     var myName = false;
     var author = null;
     var logged = false;
-
     var socket = $.atmosphere;
-
     var request = {
         url: document.location.toString() + 'chat',
         contentType: 'application/json',
         logLevel: 'debug',
-        transport: 'websocket',
+        transport: 'long-pooling',
         fallbackTransport: 'long-pooling'
+    };
+
+
+    request.onOpen = function (response) {
+        content.html($('<p>', {text: 'Atmosphere connected using ' + response.transport}));
+        input.removeAttr('disabled').focus();
+        status.text('Choose name:')
     };
 
     request.onMessage = function (response) {
         var message = response.responseBody;
-
         try {
             var json = jQuery.parseJSON(message);
         } catch (e) {
@@ -42,15 +45,13 @@ $(function () {
         }
     };
 
-    request.onOpen = function (response) {
-        content.html($('<p>', {text: 'Atmosphere connected using ' + response.transport}));
-        input.removeAttr('disabled').focus();
-        status.text('Choose name:')
-    };
+    request.onClose = function (response) {
+        logged = false;
+    }
 
     request.onError = function (response) {
-        content.html($('<p>', {text: 'Connection failed or server is down'}))
-
+        content.html($('<p>', { text: 'Sorry, but there\'s some problem with your '
+            + 'socket or the server is down' }));
     };
 
     var subSocket = socket.subscribe(request);
@@ -79,5 +80,4 @@ $(function () {
             + (datetime.getMinutes() < 10 ? '0' + datetime.getMinutes() : datetime.getMinutes())
             + ': ' + message + '</p>');
     }
-
 });
