@@ -8,11 +8,12 @@
     <name>atmosphere-labs</name>
 
     <properties>
-        <atmosphere.version>1.1.0.beta3</atmosphere.version>
+        <atmosphere.version>1.1.0-SNAPSHOT</atmosphere.version>
         <jersey.version>1.14</jersey.version>
     </properties>
 
     <modules>
     	<module>rest-chat</module>
+        <module>publish-rfq</module>
     </modules>
 </project>

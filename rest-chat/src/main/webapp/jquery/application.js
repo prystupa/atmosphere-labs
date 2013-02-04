@@ -12,8 +12,8 @@ $(function () {
         url: document.location.toString() + 'chat',
         contentType: 'application/json',
         logLevel: 'debug',
-        transport: 'long-pooling',
-        fallbackTransport: 'long-pooling'
+        transport: 'long-polling',
+        fallbackTransport: 'long-polling'
     };
 
 
